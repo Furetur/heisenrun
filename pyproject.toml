@@ -1,0 +1,39 @@
+[project]
+name = "heisenrun"
+version = "0.0.1"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Furetur", email = "furetur@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "rich>=14.3.3",
+    "shellous>=0.39.0",
+    "typer>=0.24.1",
+]
+license = {text = "MIT"}
+keywords = ["automation", "task runner", "cli", "python"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/furetur/heisenrun"
+Repository = "https://github.com/furetur/heisenrun"
+Issues = "https://github.com/furetur/heisenrun/issues"
+
+[project.scripts]
+heisenrun = "heisenrun.main:app"
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "ruff>=0.15.5",
+]
