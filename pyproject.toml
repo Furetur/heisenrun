@@ -1,12 +1,12 @@
 [project]
 name = "heisenrun"
-version = "0.0.1"
+version = "0.0.2"
 description = "Add your description here"
 readme = "README.md"
 authors = [
     { name = "Furetur", email = "furetur@gmail.com" }
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "rich>=14.3.3",
     "shellous>=0.39.0",
