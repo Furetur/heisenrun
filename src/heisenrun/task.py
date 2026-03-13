@@ -55,6 +55,8 @@ class Task:
             self._status = Status.FAIL
         except TimeoutError:
             self._status = Status.TIMEOUT
+        except asyncio.TimeoutError:
+            self._status = Status.TIMEOUT
         except asyncio.CancelledError:
             self._status = Status.INTERRUPTED
         return self
