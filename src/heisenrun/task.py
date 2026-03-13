@@ -1,7 +1,7 @@
 import asyncio
 from datetime import timedelta
 from pathlib import Path
-from typing import Optional, Self, Sequence
+from typing import Optional, Sequence
 
 from shellous import sh
 import shellous
@@ -36,7 +36,7 @@ class Task:
     def outfile(self) -> Optional[Path]:
         return self._outfile
 
-    async def run(self) -> Self:
+    async def run(self) -> "Task":
         command = sh(self._cmd)
         if self._outfile:
             command = command.stdout(self._outfile).stderr(sh.STDOUT)

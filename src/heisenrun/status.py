@@ -1,7 +1,7 @@
-from enum import StrEnum
+from enum import Enum
 
 
-class Status(StrEnum):
+class Status(str, Enum):
     NOT_STARTED = "NOT STARTED"
     RUNNING = "RUNNING"
     SUCCESS = "SUCCESS"

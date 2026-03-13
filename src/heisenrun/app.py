@@ -87,7 +87,7 @@ class HeisenrunApp:
 
     def _print_args(self) -> None:
         self._console.print(f"[bold]Command template:[/] {self._cmd_template}")
-        self._console.print(f"[bold]Instances:[/] {len(self._tasks)}")
+        self._console.print(f"[bold]Runs:[/] {len(self._tasks)}")
         if self._max_parallel < len(self._tasks):
             self._console.print(f"[bold]Max parallel tasks:[/] {self._max_parallel}")
         if self._task_timeout:
