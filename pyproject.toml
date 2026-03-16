@@ -16,7 +16,6 @@ license = {text = "MIT"}
 keywords = ["automation", "task runner", "cli", "python"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 

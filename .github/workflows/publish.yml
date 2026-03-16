@@ -1,0 +1,70 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      part:
+        description: 'Part to bump (major, minor, patch)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.10"
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        run: uv version --bump ${{ github.event.inputs.part }}
+
+      - name: Get new version
+        id: version
+        run: |
+          VERSION=$(uv version --short)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TAG=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and push version bump
+        run: |
+          git add pyproject.toml uv.lock
+          git commit -m "Bump version to ${{ steps.version.outputs.VERSION }}"
+          git push
+
+      - name: Create and push tag
+        run: |
+          git tag ${{ steps.version.outputs.TAG }}
+          git push origin ${{ steps.version.outputs.TAG }}
+
+      - name: Build package
+        run: uv build
+
+      - name: Publish
+        run: uv publish
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.TAG }}
+          name: Release ${{ steps.version.outputs.VERSION }}
+          files: dist/*
+          generate_release_notes: true
