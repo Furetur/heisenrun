@@ -1,6 +1,6 @@
 [project]
 name = "heisenrun"
-version = "0.0.5"
+version = "0.0.6"
 description = "A small CLI tool for reproducing heisenbugs"
 readme = "README.md"
 authors = [
