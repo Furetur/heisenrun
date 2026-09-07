@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from collections import Counter
 from datetime import timedelta
 from pathlib import Path
@@ -20,10 +19,6 @@ from heisenrun.report import print_report
 from heisenrun.status import Status
 from heisenrun.task import Task
 from heisenrun.runner import Runner
-
-# shellous warns when create_subprocess_exec is slow; that is expected when
-# spawning many processes and is not actionable for heisenrun users.
-logging.getLogger("shellous").setLevel(logging.ERROR)
 
 REPORT_FILENAME = "report.txt"
 
