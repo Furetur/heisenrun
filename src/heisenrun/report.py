@@ -7,7 +7,7 @@ from rich.table import Table
 from heisenrun.status import Status
 
 
-def print_report(console: Console, statuses: Mapping[int, Status]):
+def print_report(console: Console, statuses: Mapping[int, Status]) -> None:
     table = Table(title="Execution Report")
 
     table.add_column("Instance", justify="right")
@@ -19,7 +19,7 @@ def print_report(console: Console, statuses: Mapping[int, Status]):
             Status.SUCCESS: "green",
             Status.FAIL: "red",
             Status.TIMEOUT: "yellow",
-            Status.INTERRUPTED: "magenta"
+            Status.INTERRUPTED: "magenta",
         }.get(status, "white")
 
         table.add_row(str(i), f"[{color}]{status}[/{color}]")
