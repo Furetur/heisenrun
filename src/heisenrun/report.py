@@ -10,6 +10,17 @@ from heisenrun.status import Status
 def _format_log_size(size: Optional[int]) -> str:
     if size is None:
         return "—"
+
+    for threshold, unit in (
+        (1024**4, "TB"),
+        (1024**3, "GB"),
+        (1024**2, "MB"),
+        (1024, "KB"),
+    ):
+        if size >= threshold:
+            value = size / threshold
+            formatted = f"{value:.1f}".rstrip("0").rstrip(".")
+            return f"{formatted} {unit}"
     return f"{size} B"
 
 
