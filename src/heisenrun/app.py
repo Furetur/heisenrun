@@ -71,6 +71,18 @@ class HeisenrunApp:
     def _get_current_task_statuses(self) -> Mapping[int, Status]:
         return {task.idx: task.status for task in self._tasks}
 
+    def _get_log_sizes(self) -> Optional[Mapping[int, Optional[int]]]:
+        if not self._outdir:
+            return None
+        sizes: dict[int, Optional[int]] = {}
+        for task in self._tasks:
+            outfile = task.outfile
+            if outfile is not None and outfile.exists():
+                sizes[task.idx] = outfile.stat().st_size
+            else:
+                sizes[task.idx] = None
+        return sizes
+
     async def _run_with_progress_bar(self) -> None:
         runner = Runner(self._tasks, max_parallel=self._max_parallel)
         with Progress(
@@ -111,4 +123,8 @@ class HeisenrunApp:
         except KeyboardInterrupt:
             self._console.print("\n[bold red]Keyboard interrupt[/]")
 
-        print_report(self._console, self._get_current_task_statuses())
+        print_report(
+            self._console,
+            self._get_current_task_statuses(),
+            log_sizes=self._get_log_sizes(),
+        )

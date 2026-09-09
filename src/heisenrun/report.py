@@ -1,5 +1,5 @@
 from collections import Counter
-from typing import Mapping
+from typing import Mapping, Optional
 
 from rich.console import Console
 from rich.table import Table
@@ -7,11 +7,34 @@ from rich.table import Table
 from heisenrun.status import Status
 
 
-def print_report(console: Console, statuses: Mapping[int, Status]):
+def _format_log_size(size: Optional[int]) -> str:
+    if size is None:
+        return "—"
+
+    for threshold, unit in (
+        (1024**4, "TB"),
+        (1024**3, "GB"),
+        (1024**2, "MB"),
+        (1024, "KB"),
+    ):
+        if size >= threshold:
+            value = size / threshold
+            formatted = f"{value:.1f}".rstrip("0").rstrip(".")
+            return f"{formatted} {unit}"
+    return f"{size} B"
+
+
+def print_report(
+    console: Console,
+    statuses: Mapping[int, Status],
+    log_sizes: Optional[Mapping[int, Optional[int]]] = None,
+) -> None:
     table = Table(title="Execution Report")
 
     table.add_column("Instance", justify="right")
     table.add_column("Status")
+    if log_sizes is not None:
+        table.add_column("Log Size", justify="right")
 
     for i, status in sorted(statuses.items()):
         color = {
@@ -19,10 +42,13 @@ def print_report(console: Console, statuses: Mapping[int, Status]):
             Status.SUCCESS: "green",
             Status.FAIL: "red",
             Status.TIMEOUT: "yellow",
-            Status.INTERRUPTED: "magenta"
+            Status.INTERRUPTED: "magenta",
         }.get(status, "white")
 
-        table.add_row(str(i), f"[{color}]{status}[/{color}]")
+        row = [str(i), f"[{color}]{status}[/{color}]"]
+        if log_sizes is not None:
+            row.append(_format_log_size(log_sizes.get(i)))
+        table.add_row(*row)
 
     console.print()
     console.print(table)
